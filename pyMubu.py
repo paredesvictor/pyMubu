@@ -26,7 +26,7 @@ class Track:
     mx_col_names: list[str] = field(default_factory = lambda: [''])
     has_time_tags: bool = False
     non_num_types: str = 'none'
-    max_size: str = 256
+    max_size: int = 256
     buffers: list[Buffer] = field(default_factory = lambda: [Buffer()])
 
     def updateNumBuffer(self, num_buffer):
@@ -34,6 +34,9 @@ class Track:
         buffer = deepcopy(self.buffers[-1])
         self.buffers += [buffer for i in range(buffer_diff)]
 
+    def setInfo(self, attribute, value):
+        return
+        
 @dataclass
 class Container:
     num_buffer: int = 1
@@ -44,11 +47,17 @@ class Container:
     def addTrack(self):
         track = Track()
         track.updateNumBuffer(self.num_buffer)
+        self.tracks.append(track)
+        self.num_tracks += 1
 
     def addBuffer(self):
         self.numBuffer += 1
         for track in self.tracks:
             track.updateNumBuffer(self.numBuffer)
+
+    def setTrackInfo(self, info):
+        self.tracks[track_idx].setInfo(attribute, value)
+
 
 class MubuLink:
 
@@ -65,7 +74,7 @@ class MubuLink:
         dispatch = self.generateDispatcher()
     
         self.client = udp_client.SimpleUDPClient(args_client.ip, args_client.port)
-        self.server = osc_server.ThreadingOSCUDPServer(
+        self.server = osc_server.BlockingOSCUDPServer(
             (args_server.ip, args_server.port), 
             dispatch
             )
@@ -76,15 +85,51 @@ class MubuLink:
         methods = tuple([ m for m in dir(self) if not m.startswith('__') or m == ''])
         dispatch = dispatcher.Dispatcher()
         for method in methods:
-            if method != 'generateDispatcher':
+            if method not in ('generateDispatcher', 'connect'):
                 address = ''.join(('/', method))
                 eval('dispatch.map("{}", self.{})'.format(address, method))
+        return dispatch
 
-    def addTrack(self, addrs, *unused):
+    def connect(self):
+        print('serving...')
+        self.server.serve_forever()
+
+    def addTrack(self, addrs):
         self.container.addTrack()
     
-    def addBuffer(self, addrs, *unused):
+    def addBuffer(self, addrs):
         self.container.addBuffer()
+
+    def setTrackInfo(self, addrs, *info):
+        track_idx = info[0] - 1
+        att_name = info[1]
+        value = info[2:]
+        if att_name == 'name':
+            attribute = 'name'
+            value = str(value[0])
+        if att_name == 'maxsize':
+            attribute = 'max_size'
+            value = int(value[0])
+        if att_name == 'matrixrows':
+            attribute = 'mx_rows'
+            value = int(value[0])
+        if att_name == 'matrixcols':
+            attribute = 'mx_cols'
+            value = int(value[0])
+        if att_name == 'matrixvarrows':
+            attribute = 'has_var_rows'
+            value = bool(value[0])
+        if att_name == 'matrixcolnames':
+            attribute = 'mx_col_names'
+            value = value
+        if att_name == 'extradata':
+            attribute = 'non_num_types'
+            value = str(value[0])
+        if att_name == 'timetagged':
+            attribute = 'has_time_tags'
+            value = bool(value[0])
+        self.container.setTrackInfo(attribute, value)
 
 if __name__ == '__main__':
     mubu = MubuLink(8011, 8012)
+    mubu.connect()
