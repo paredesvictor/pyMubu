@@ -45,7 +45,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 281.0, 90.0, 75.0, 22.0 ],
+					"patching_rect" : [ 168.0, 124.0, 75.0, 22.0 ],
 					"text" : "route readall"
 				}
 
@@ -58,7 +58,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 281.0, 123.0, 24.0, 24.0 ]
+					"patching_rect" : [ 168.0, 156.0, 24.0, 24.0 ]
 				}
 
 			}
@@ -108,7 +108,6 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"assistshowspatchername" : 0,
-						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-13",
@@ -587,7 +586,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 163.0, 165.0, 137.0, 22.0 ],
+					"patching_rect" : [ 50.0, 188.0, 137.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -606,7 +605,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 50.0, 165.0, 94.0, 22.0 ],
+					"patching_rect" : [ 50.0, 75.0, 94.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"embed" : 0,
 						"externalfiles" : 1,
@@ -627,7 +626,7 @@
 				"box" : 				{
 					"comment" : "",
 					"id" : "obj-40",
-					"index" : 1,
+					"index" : 0,
 					"maxclass" : "inlet",
 					"numinlets" : 0,
 					"numoutlets" : 1,
@@ -648,6 +647,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-39", 0 ],
+					"midpoints" : [ 59.5, 110.0, 177.5, 110.0 ],
 					"order" : 0,
 					"source" : [ "obj-1", 0 ]
 				}
@@ -656,6 +656,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
+					"midpoints" : [ 59.5, 220.0, 40.5, 220.0, 40.5, 64.0, 59.5, 64.0 ],
 					"source" : [ "obj-20", 0 ]
 				}
 
@@ -681,7 +682,13 @@
 				}
 
 			}
- ]
+ ],
+		"dependency_cache" : [ 			{
+				"name" : "mubu.mxo",
+				"type" : "iLaX"
+			}
+ ],
+		"autosave" : 0
 	}
 
 }
